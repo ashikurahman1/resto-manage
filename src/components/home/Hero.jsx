@@ -4,7 +4,7 @@ const Hero = () => {
   return (
     <div className="w-full @container mb-8">
       <div
-        className="relative overflow-hidden rounded-xl bg-cover bg-center min-h-[240px] md:min-h-[600px] shadow-sm"
+        className="relative overflow-hidden container mx-auto rounded-xl bg-cover bg-center min-h-[240px] md:min-h-[600px] shadow-sm"
         style={{
           backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 60%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDM-2Fy7R1M1dmV9ydtthKMKUlkm_G1m_IK61p5K5w5acio7N66uS0KfkUqGoiZ1FRHIF173dmEiuZlo1cjN8ELLcwJNTFE88ZZ2feMeS3imtAvvPoeTEoENS9EkZAhGLjfK4-So0Jd5WKJmKRaI1IDuNWOIVmDOjMnOLlDSQKGLppZjvFjEmOieUk28LeCnqja-VcQoHImV2soLkLuW7merhlFIxRlpOpc8-2LvI95DwZeZhqCupA6pEu9zyIdfJGRBu5w0DXG18A")`,
         }}
