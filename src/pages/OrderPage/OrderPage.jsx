@@ -1,58 +1,55 @@
-import React from 'react';
-import { MdAddCircle } from 'react-icons/md';
+import { MdAddCircle, MdShoppingCart } from 'react-icons/md';
 import OrderItem from '../../components/OrderItem/OrderItem';
 import OrderSummary from '../../components/OrderSummary/OrderSummary';
-const items = [
-  {
-    id: 1,
-    name: 'Margherita Pizza',
-    desc: 'Classic pizza with fresh tomatoes, mozzarella cheese, and basil.',
-    price: 12.99,
-    qty: 2,
-    img: 'https://images.unsplash.com/photo-1601924582975-4f7c6f3e1b8e?q=80&w=400',
-    note: '',
-  },
-  {
-    id: 2,
-    name: 'Caesar Salad',
-    desc: 'Crisp romaine lettuce with Caesar dressing, croutons, and Parmesan cheese.',
-    price: 8.5,
-    qty: 1,
-    img: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=400',
-    note: 'No croutons, please.',
-  },
-];
+import { useCart } from '../../context/CartContext';
+import { Link } from 'react-router';
+
 const OrderPage = () => {
+  const { cart } = useCart();
   return (
-    <main className="max-w-7xl mx-auto px-4 md:px-6 py-8">
-      <div className="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl md:text-4xl font-black mb-2">
-            Current Order
-          </h1>
-          <div className="flex items-center gap-3 text-text-muted dark:text-gray-400">
-            <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-bold">
-              Table #5
-            </span>
-            <span className="text-sm font-medium">Waiter: John D.</span>
+    <div className="min-h-screen bg-transparent py-8 md:py-12 px-4 md:px-6">
+      <div className="container mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 gap-6 text-center md:text-left border-b border-base-200 pb-8">
+          <div>
+            <h1 className="text-2xl md:text-4xl font-black text-base-content tracking-tighter">Your Selection</h1>
+            <p className="text-sm md:text-base text-base-content/60 mt-2 font-medium">Review your items and proceed to checkout.</p>
+          </div>
+          <Link 
+            to="/" 
+            className="btn btn-ghost text-primary font-black hover:bg-primary/5 px-6 rounded-xl flex items-center gap-2 uppercase text-[11px] tracking-widest"
+          >
+            <MdAddCircle size={20} /> Add More
+          </Link>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-12 items-start">
+          {/* Cart Items */}
+          <div className="flex-1 w-full space-y-6">
+            {cart.length === 0 ? (
+              <div className="bg-base-100 rounded-3xl p-20 text-center border border-base-200 shadow-sm">
+                <div className="size-24 bg-base-200 rounded-full flex items-center justify-center mx-auto mb-8 text-base-content/20">
+                  <MdShoppingCart size={48} />
+                </div>
+                <h3 className="text-3xl font-black text-base-content">Your cart is empty</h3>
+                <p className="text-base-content/60 mt-3 mb-10 font-medium text-lg">Looks like you haven't added anything to your cart yet.</p>
+                <Link to="/" className="btn btn-primary btn-lg px-12 rounded-xl text-white font-bold tracking-wide shadow-lg shadow-primary/20">
+                  Browse Our Menu
+                </Link>
+              </div>
+            ) : (
+              cart.map((item) => (
+                <OrderItem key={item.id} item={item} />
+              ))
+            )}
+          </div>
+
+          {/* Checkout Summary */}
+          <div className="w-full lg:w-[420px] sticky top-28">
+            <OrderSummary />
           </div>
         </div>
-        <button className="flex items-center gap-2 text-primary font-bold hover:bg-primary/10 px-4 py-2 rounded-lg">
-          <MdAddCircle size={20} /> Add Items
-        </button>
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-8 flex flex-col gap-4">
-          {items.map(item => (
-            <OrderItem key={item.id} item={item} />
-          ))}
-        </div>
-        <div className="lg:col-span-4">
-          <OrderSummary />
-        </div>
-      </div>
-    </main>
+    </div>
   );
 };
 

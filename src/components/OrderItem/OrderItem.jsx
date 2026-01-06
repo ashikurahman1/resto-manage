@@ -1,63 +1,55 @@
-import React from 'react';
 import { MdAdd, MdDelete, MdEditNote, MdRemove } from 'react-icons/md';
+import { useCart } from '../../context/CartContext';
 
 const OrderItem = ({ item }) => {
+  const { updateQuantity, removeFromCart } = useCart();
   return (
-    <div className="group bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm border border-transparent hover:border-primary/20 transition-all">
-      <div className="flex flex-col sm:flex-row gap-5">
-        <div className="w-full sm:w-24 h-24 shrink-0 rounded-lg overflow-hidden relative">
-          <div
-            className="absolute inset-0 bg-center bg-cover transition-transform group-hover:scale-110 duration-500"
-            style={{ backgroundImage: `url(${item.img})` }}
-          ></div>
+    <div className="bg-base-100 rounded-2xl p-6 border border-base-200 shadow-sm flex flex-col sm:flex-row gap-8 group hover:border-primary/20 transition-all">
+      <div className="w-full sm:w-40 h-32 shrink-0 rounded-2xl overflow-hidden shadow-inner bg-base-200">
+        <img 
+          src={item.main_image || item.image} 
+          alt={item.name} 
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+      </div>
+
+      <div className="flex flex-1 flex-col justify-between py-1">
+        <div className="flex justify-between items-start gap-4">
+          <div>
+            <h3 className="text-lg md:text-xl font-bold text-base-content mb-1 leading-tight">{item.name}</h3>
+            <p className="text-base-content/50 text-xs md:text-sm font-medium line-clamp-1 max-w-sm">
+              {item.desc || item.description}
+            </p>
+          </div>
+          <span className="text-xl md:text-2xl font-black text-base-content tracking-tighter">
+            ${(item.price * item.quantity).toFixed(2)}
+          </span>
         </div>
 
-        <div className="flex flex-1 flex-col justify-between">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="text-lg font-bold mb-1">{item.name}</h3>
-              <p className="text-text-muted dark:text-gray-400 text-sm mb-2">
-                {item.desc}
-              </p>
-              <div className="flex items-center gap-2 text-primary text-xs font-medium cursor-pointer hover:underline">
-                <MdEditNote size={18} /> {item.note ? 'Edit Note' : 'Add Note'}
-              </div>
-              {item.note && (
-                <p className="text-text-muted dark:text-gray-500 text-xs mt-1 italic">
-                  Note: {item.note}
-                </p>
-              )}
-            </div>
-            <span className="text-lg font-bold">
-              ${(item.price * item.qty).toFixed(2)}
-            </span>
-          </div>
+        <div className="flex justify-between items-center mt-6">
+          <button
+            onClick={() => removeFromCart(item.id)}
+            className="btn btn-ghost btn-sm text-error/40 hover:text-error hover:bg-error/5 gap-2 font-bold"
+          >
+            <MdDelete size={20} /> <span className="hidden sm:inline">Remove</span>
+          </button>
 
-          <div className="flex justify-between items-end mt-4">
+          <div className="flex items-center bg-base-200 rounded-xl p-1.5 gap-2 border border-base-300/50">
             <button
-              // onClick={() => onUpdateQty(item.id, -item.qty)}
-              className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 p-1 rounded-md"
+              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+              className="size-9 flex items-center justify-center rounded-lg hover:bg-base-100 text-base-content/60 transition-all active:scale-90"
             >
-              <MdDelete size={20} />
+              <MdRemove size={20} />
             </button>
-
-            <div className="flex items-center bg-background-light dark:bg-white/5 rounded-lg p-1 border border-gray-100 dark:border-white/10">
-              <button
-                // onClick={() => onUpdateQty(item.id, -1)}
-                className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-white dark:hover:bg-white/10 text-text-main dark:text-white transition-all"
-              >
-                <MdRemove size={16} />
-              </button>
-              <span className="w-10 text-center text-sm font-bold">
-                {item.qty}
-              </span>
-              <button
-                // onClick={() => onUpdateQty(item.id, 1)}
-                className="w-8 h-8 flex items-center justify-center rounded-md bg-primary text-white hover:bg-primary/90 transition-all"
-              >
-                <MdAdd size={16} />
-              </button>
-            </div>
+            <span className="w-10 text-center font-black text-lg">
+              {item.quantity}
+            </span>
+            <button
+              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+              className="size-9 flex items-center justify-center rounded-lg bg-primary text-white shadow-lg shadow-primary/20 transition-all active:scale-90"
+            >
+              <MdAdd size={20} />
+            </button>
           </div>
         </div>
       </div>

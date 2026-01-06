@@ -8,178 +8,123 @@ import {
   MdEmail,
   MdLock,
 } from 'react-icons/md';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import { useAuth } from '../../context/AuthContext';
+import { toast } from 'react-toastify';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { registerUser } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+   setLoading(true);
+    try {
+      await registerUser(name, email, password);
+      toast.success('Registration successful! Please login.');
+      navigate('/auth/login');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Registration failed');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center container mx-auto">
-      <div className="relative w-full max-w-[480px] flex flex-col gap-6 bg-white dark:bg-[#1a140e] rounded-xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:shadow-none border border-[#e7dbcf] dark:border-[#3e2d22] p-8 sm:p-10 transition-all">
-        {/* Back to Homepage Button */}
-        <a
-          href="/"
-          className="flex items-center gap-2 text-sm font-medium text-[#9a734c] hover:text-primary transition-colors mb-2 group"
-        >
-          <MdArrowBack className="text-[18px] group-hover:-translate-x-1 transition-transform" />
-          Back to homepage
-        </a>
+    <div className="py-5 lg:py-10 flex flex-col items-center justify-center bg-base-200  px-4 ">
+        
 
-        {/* Branding / Header */}
-        <div className="flex flex-col items-center gap-3 text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/15 text-primary">
-            <MdRestaurantMenu size={28} />
+      <div className="w-full max-w-md bg-base-100 rounded-2xl shadow-sm p-10 border border-base-300">
+        <div className="flex flex-col items-center gap-6 mb-8">
+          <div className="size-16 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+            <MdRestaurantMenu size={36} />
           </div>
-          <div className="flex flex-col gap-1">
-            <h1 className="text-[#1b140d] dark:text-white text-3xl font-bold tracking-tight">
-              Create Account
-            </h1>
-            <p className="text-[#9a734c] dark:text-[#b09376] text-sm font-normal">
-              Join RestoManager to start managing your business.
-            </p>
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-base-content uppercase tracking-wider">Join Us</h1>
+            <p className="text-base-content/60 mt-2 text-pretty">Create your account and start your journey.</p>
           </div>
         </div>
 
-        {/* Registration Form */}
-        <form
-          className="flex flex-col gap-4 mt-2"
-          onSubmit={e => e.preventDefault()}
-        >
-          {/* Full Name Input */}
-          <div className="flex flex-col gap-1.5">
-            <label
-              className="text-[#1b140d] dark:text-[#ede0d4] text-sm font-medium"
-              htmlFor="name"
-            >
-              Full Name
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-bold text-base-content/70">Full Name</span>
+            </label>
+            <input
+              type="text"
+              placeholder="John Doe"
+              className="input input-bordered w-full bg-base-200 border-none focus:ring-2 focus:ring-primary/50 text-base-content font-medium h-12 rounded-xl"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-bold text-base-content/70">Email Address</span>
+            </label>
+            <input
+              type="email"
+              placeholder="name@example.com"
+              className="input input-bordered w-full bg-base-200 border-none focus:ring-2 focus:ring-primary/50 text-base-content font-medium h-12 rounded-xl"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-bold text-base-content/70">Password</span>
             </label>
             <div className="relative">
               <input
-                className="form-input flex w-full rounded-lg text-[#1b140d] dark:text-white placeholder:text-[#9a734c]/50 border border-[#e7dbcf] dark:border-[#3e2d22] bg-[#fcfaf8] dark:bg-[#251c16] focus:border-primary focus:ring-1 focus:ring-primary h-11 px-4 text-base transition-colors"
-                id="name"
-                placeholder="John Doe"
-                type="text"
-              />
-            </div>
-          </div>
-
-          {/* Email Input */}
-          <div className="flex flex-col gap-1.5">
-            <label
-              className="text-[#1b140d] dark:text-[#ede0d4] text-sm font-medium"
-              htmlFor="email"
-            >
-              Email Address
-            </label>
-            <input
-              className="form-input flex w-full rounded-lg text-[#1b140d] dark:text-white placeholder:text-[#9a734c]/50 border border-[#e7dbcf] dark:border-[#3e2d22] bg-[#fcfaf8] dark:bg-[#251c16] focus:border-primary focus:ring-1 focus:ring-primary h-11 px-4 text-base transition-colors"
-              id="email"
-              placeholder="name@company.com"
-              type="email"
-            />
-          </div>
-
-          {/* Password Input */}
-          <div className="flex flex-col gap-1.5">
-            <label
-              className="text-[#1b140d] dark:text-[#ede0d4] text-sm font-medium"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <div className="relative flex items-center">
-              <input
-                className="form-input w-full rounded-lg text-[#1b140d] dark:text-white placeholder:text-[#9a734c]/50 border border-[#e7dbcf] dark:border-[#3e2d22] bg-[#fcfaf8] dark:bg-[#251c16] focus:border-primary focus:ring-1 focus:ring-primary h-11 pl-4 pr-12 text-base transition-colors"
-                id="password"
-                placeholder="Create a password"
                 type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                className="input input-bordered w-full bg-base-200 border-none focus:ring-2 focus:ring-primary/50 text-base-content font-medium h-12 rounded-xl"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
               <button
+                type="button"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-base-content/40 hover:text-primary transition-colors"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-0 w-12 text-[#9a734c] hover:text-primary transition-colors"
-                type="button"
               >
-                {showPassword ? (
-                  <MdVisibility size={20} />
-                ) : (
-                  <MdVisibilityOff size={20} />
-                )}
+                {showPassword ? <MdVisibility size={20} /> : <MdVisibilityOff size={20} />}
               </button>
             </div>
           </div>
 
-          {/* Confirm Password Input */}
-          <div className="flex flex-col gap-1.5">
-            <label
-              className="text-[#1b140d] dark:text-[#ede0d4] text-sm font-medium"
-              htmlFor="confirm-password"
-            >
-              Confirm Password
-            </label>
-            <div className="relative flex items-center">
-              <input
-                className="form-input w-full rounded-lg text-[#1b140d] dark:text-white placeholder:text-[#9a734c]/50 border border-[#e7dbcf] dark:border-[#3e2d22] bg-[#fcfaf8] dark:bg-[#251c16] focus:border-primary focus:ring-1 focus:ring-primary h-11 pl-4 pr-12 text-base transition-colors"
-                id="confirm-password"
-                placeholder="Repeat your password"
-                type={showConfirmPassword ? 'text' : 'password'}
-              />
-              <button
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-0 w-12 text-[#9a734c] hover:text-primary transition-colors"
-                type="button"
-              >
-                {showConfirmPassword ? (
-                  <MdVisibility size={20} />
-                ) : (
-                  <MdVisibilityOff size={20} />
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* Terms and Conditions */}
-          <div className="flex items-start gap-2 mt-1">
-            <input
-              className="mt-1 h-4 w-4 rounded border-[#e7dbcf] text-primary focus:ring-primary/20 bg-[#fcfaf8] dark:bg-[#251c16]"
-              type="checkbox"
-              id="terms"
-              required
-            />
-            <label
-              htmlFor="terms"
-              className="text-xs text-[#9a734c] dark:text-[#b09376] leading-tight"
-            >
-              I agree to the{' '}
-              <a href="#" className="text-primary hover:underline">
-                Terms of Service
-              </a>{' '}
-              and{' '}
-              <a href="#" className="text-primary hover:underline">
-                Privacy Policy
-              </a>
-              .
+          <div className="flex items-start gap-3 mt-2">
+            <input type="checkbox" className="checkbox checkbox-primary checkbox-sm mt-1 rounded-md" required id="terms" />
+            <label htmlFor="terms" className="text-xs text-base-content/50 font-medium leading-relaxed">
+              I agree to the <span className="text-primary font-bold cursor-pointer hover:underline">Terms of Service</span> and <span className="text-primary font-bold cursor-pointer hover:underline">Privacy Policy</span>.
             </label>
           </div>
 
-          {/* Submit Button */}
-          <button className="flex w-full items-center justify-center rounded-lg h-12 bg-primary hover:bg-[#d4761a] active:bg-[#b86515] text-[#1b140d] text-base font-bold transition-all shadow-sm mt-2">
-            Create Account
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btn-primary w-full text-white font-bold h-14 rounded-xl shadow-lg shadow-primary/20 transition-all hover:scale-[1.01] active:scale-95"
+          >
+            {loading ? <span className="loading loading-spinner"></span> : 'Create Account'}
           </button>
         </form>
 
-        {/* Footer Meta */}
-        <div className="text-center pt-2">
-          <p className="text-[#9a734c] dark:text-[#b09376] text-sm font-normal">
-            Already have an account?{' '}
-            <Link
-              className="font-semibold text-[#1b140d] dark:text-white hover:text-primary transition-colors"
-              to="/auth/login"
-            >
-              Sign In
-            </Link>
-          </p>
-        </div>
+        <p className="text-center mt-10 text-sm font-medium text-base-content/60">
+          Already have an account?{' '}
+          <Link to="/auth/login" className="text-primary font-bold hover:underline">
+            Sign In here
+          </Link>
+        </p>
       </div>
     </div>
   );
