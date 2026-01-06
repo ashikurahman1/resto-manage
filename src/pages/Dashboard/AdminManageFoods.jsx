@@ -5,6 +5,7 @@ import Loader from '../../components/Loader/Loader';
 import { MdAdd, MdEdit, MdDelete } from 'react-icons/md';
 import AddFoodModal from '../../components/shared/AddFoodModal';
 import { toast } from 'react-toastify';
+import { FoodCardSkeleton } from '../../components/shared/Skeleton';
 
 const AdminManageFoods = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -81,7 +82,22 @@ const AdminManageFoods = () => {
      }
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return (
+    <div className="space-y-8 animate-pulse">
+      <div className="flex justify-between items-end">
+        <div className="space-y-2">
+          <div className="h-8 w-48 bg-base-300 rounded-lg"></div>
+          <div className="h-4 w-64 bg-base-300 rounded-lg"></div>
+        </div>
+        <div className="h-12 w-32 bg-primary/20 rounded-2xl"></div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {[...Array(8)].map((_, i) => (
+          <FoodCardSkeleton key={i} />
+        ))}
+      </div>
+    </div>
+  );
 
   return (
     <div className="space-y-8">

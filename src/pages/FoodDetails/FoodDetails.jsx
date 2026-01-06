@@ -4,6 +4,7 @@ import api from '../../api/axios';
 import { MdArrowBack, MdAddShoppingCart, MdTimer, MdLocalFireDepartment, MdInfo, MdCheck } from 'react-icons/md';
 import { motion } from 'framer-motion';
 import Loader from '../../components/Loader/Loader';
+import Skeleton from '../../components/shared/Skeleton';
 import { toast } from 'react-toastify';
 import { useCart } from '../../context/CartContext';
 import { useQuery } from '@tanstack/react-query';
@@ -35,7 +36,30 @@ const FoodDetails = () => {
     }
   }, [isError, navigate]);
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return (
+    <div className="container mx-auto px-4 py-8 animate-pulse">
+      <div className="h-10 w-32 bg-base-300 rounded-xl mb-8"></div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+        <div className="h-[500px] lg:h-[600px] bg-base-300 rounded-[3rem]"></div>
+        <div className="space-y-8 py-6">
+          <div className="space-y-4">
+            <div className="h-4 w-24 bg-base-300 rounded-lg"></div>
+            <div className="h-16 w-full bg-base-300 rounded-2xl"></div>
+          </div>
+          <div className="h-4 w-full bg-base-300 rounded-lg"></div>
+          <div className="h-4 w-3/4 bg-base-300 rounded-lg"></div>
+          <div className="flex gap-4 pt-4">
+            <div className="size-20 bg-base-300 rounded-2xl"></div>
+            <div className="size-20 bg-base-300 rounded-2xl"></div>
+          </div>
+          <div className="pt-8 flex gap-6">
+            <div className="h-16 w-32 bg-base-300 rounded-2xl"></div>
+            <div className="h-16 flex-1 bg-primary/20 rounded-2xl"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
   if (!food) return null;
 
   const handleAddToCart = () => {

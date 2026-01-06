@@ -4,6 +4,7 @@ import api from '../../api/axios';
 import Loader from '../../components/Loader/Loader';
 import { MdShoppingBag, MdAccessTime, MdCheckCircle, MdCancel, MdLocalShipping } from 'react-icons/md';
 import { motion } from 'framer-motion';
+import { OrderRowSkeleton, StatsCardSkeleton } from '../../components/shared/Skeleton';
 
 const UserDashboard = () => {
   const { data: orders = [], isLoading, isError } = useQuery({
@@ -19,7 +20,31 @@ const UserDashboard = () => {
     initialData: []
   });
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return (
+    <div className="min-h-screen bg-transparent py-8 md:py-16 px-4 md:px-6">
+      <div className="container mx-auto max-w-6xl space-y-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <StatsCardSkeleton />
+          <StatsCardSkeleton />
+          <StatsCardSkeleton />
+        </div>
+        <div className="bg-base-100 rounded-[2.5rem] border border-base-200 overflow-hidden">
+          <div className="p-10 border-b border-base-200">
+            <div className="h-8 w-48 bg-base-200 animate-pulse rounded-lg"></div>
+          </div>
+          <div className="p-10">
+            <table className="table w-full">
+              <tbody>
+                {[...Array(5)].map((_, i) => (
+                  <OrderRowSkeleton key={i} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
   if (isError) return null;  
 
   const stats = {

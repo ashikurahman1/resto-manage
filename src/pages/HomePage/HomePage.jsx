@@ -5,6 +5,7 @@ import Loader from '../../components/Loader/Loader';
 import api from '../../api/axios';
 import { useQuery } from '@tanstack/react-query';
 import { MdVerified, MdOutlineTimer, MdStar, MdRestaurant } from 'react-icons/md';
+import { FoodCardSkeleton } from '../../components/shared/Skeleton';
 
 const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -173,7 +174,11 @@ const HomePage = () => {
 
           <AnimatePresence mode="wait">
             {isLoading ? (
-              <Loader key="loader" />
+              <div key="skeleton-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                {[...Array(8)].map((_, i) => (
+                  <FoodCardSkeleton key={i} />
+                ))}
+              </div>
             ) : (
               <motion.div
                 layout

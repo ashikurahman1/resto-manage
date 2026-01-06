@@ -4,6 +4,7 @@ import api from '../../api/axios';
 import Loader from '../../components/Loader/Loader';
 import { MdCheckCircle, MdCancel, MdMoreHoriz } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import { OrderRowSkeleton } from '../../components/shared/Skeleton';
 
 const AdminOrders = () => {
   const queryClient = useQueryClient();
@@ -28,7 +29,25 @@ const AdminOrders = () => {
     }
   });
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return (
+    <div className="space-y-8 animate-pulse">
+      <div className="space-y-2">
+        <div className="h-8 w-48 bg-base-300 rounded-lg"></div>
+        <div className="h-4 w-64 bg-base-300 rounded-lg"></div>
+      </div>
+      <div className="bg-base-100 rounded-3xl border border-base-200 overflow-hidden">
+        <div className="p-8">
+          <table className="table w-full">
+            <tbody>
+              {[...Array(6)].map((_, i) => (
+                <OrderRowSkeleton key={i} />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="space-y-8">

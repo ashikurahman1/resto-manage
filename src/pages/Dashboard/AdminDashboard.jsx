@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts';
+import { StatsCardSkeleton } from '../../components/shared/Skeleton';
 
 const AdminDashboard = () => {
   // Fetch All Orders for Stats
@@ -76,7 +77,24 @@ const AdminDashboard = () => {
     }
   ];
 
-  if (ordersLoading || foodsLoading) return <Loader />;
+  if (ordersLoading || foodsLoading) return (
+    <div className="space-y-8 md:space-y-12 pb-10">
+      <div className="space-y-2">
+        <div className="h-10 w-64 bg-base-300 animate-pulse rounded-lg"></div>
+        <div className="h-4 w-48 bg-base-300 animate-pulse rounded-lg"></div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <StatsCardSkeleton />
+        <StatsCardSkeleton />
+        <StatsCardSkeleton />
+        <StatsCardSkeleton />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 bg-base-100 rounded-[2rem] border border-base-200 p-8 h-96 animate-pulse"></div>
+        <div className="bg-base-100 rounded-[2rem] border border-base-200 p-8 h-96 animate-pulse"></div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="space-y-8 md:space-y-12 pb-10">
