@@ -45,7 +45,16 @@ const UserDashboard = () => {
       </div>
     </div>
   );
-  if (isError) return null;  
+  if (isError) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center space-y-4">
+        <MdCancel size={64} className="mx-auto text-error opacity-20" />
+        <h2 className="text-2xl font-black text-base-content">Connection Error</h2>
+        <p className="text-base-content/60">We couldn't load your orders. Please try refreshing.</p>
+        <button onClick={() => window.location.reload()} className="btn btn-primary rounded-xl px-8">Retry</button>
+      </div>
+    </div>
+  );
 
   const stats = {
     total: orders.length,
@@ -130,15 +139,16 @@ const UserDashboard = () => {
                       </td>
                       <td>
                         <div className="flex -space-x-4 overflow-hidden py-1">
-                          {order.items?.map((item, idx) => (
+                          {order.items?.filter(item => item && item.food_name).map((item, idx) => (
                             <div key={idx} className="tooltip tooltip-bottom" data-tip={item.food_name}>
                               <img
                                 className="inline-block size-12 rounded-2xl ring-[6px] ring-base-100 object-cover shadow-sm grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500"
-                                src={item.food_image}
+                                src={item.food_image || 'https://via.placeholder.com/100'}
                                 alt={item.food_name}
                               />
                             </div>
                           ))}
+                          {!order.items?.length && <span className="text-xs text-base-content/20 italic">No details</span>}
                         </div>
                       </td>
                       <td>
